@@ -12,6 +12,26 @@
 
 #include "philo.h"
 
+void	*monitoring(void *arg){
+	t_data	*data;
+	int		i;
+
+	data = arg;
+	while (1)
+	{
+		i = -1;
+		while (++i < data->args[NB_PHILOS])
+		{
+			if (elapsed_time_since(data->philos[i].last_eat) > data->args[DIE_TIME])
+			{
+				print_message(DEAD, &data->philos[i]);
+				exit(1);
+			}
+			usleep(400);
+		}
+	}
+}
+
 int	init(t_data *data)
 {
 	int	i;
@@ -22,11 +42,13 @@ int	init(t_data *data)
 	if (!data->forks)
 		return (0);
 	pthread_mutex_init(&data->print, NULL);
+	gettimeofday(&data->start_time, DST_NONE);
 	i = -1;
 	while (++i < data->args[NB_PHILOS])
 	{
 		pthread_mutex_init(&data->forks[i], NULL);
 		data->philos[i].id = i;
+		gettimeofday(&data->philos[i].last_eat, DST_NONE);
 		data->philos[i].data = data;
 		data->philos[i].left_fork = &data->forks[i];
 		if (i == 0)
@@ -36,9 +58,13 @@ int	init(t_data *data)
 		if (pthread_create(&data->philos[i].thread, NULL, &run, &data->philos[i]))
 			return (0);
 	}
+	if (pthread_create(&data->monitor, NULL, &monitoring, data))
+		return (0);
 	i = -1;
 	while (++i < data->args[NB_PHILOS])
 		if (pthread_join(data->philos[i].thread, NULL))
+			return (0);
+	if (pthread_join(data->monitor, NULL))
 			return (0);
 	i = -1;
 	while (++i < data->args[NB_PHILOS])

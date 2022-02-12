@@ -12,6 +12,16 @@
 
 #include "philo.h"
 
+int	elapsed_time_since(t_time time)
+{
+	t_time curr_time;
+
+	gettimeofday(&curr_time, DST_NONE);
+	curr_time.tv_sec = curr_time.tv_sec - time.tv_sec;
+	curr_time.tv_usec = curr_time.tv_usec - time.tv_usec;
+	return (curr_time.tv_sec * 1000 + curr_time.tv_usec / 1000);
+}
+
 void	*ft_memset(void *dest, int c, size_t len)
 {
 	unsigned char	*ptr;

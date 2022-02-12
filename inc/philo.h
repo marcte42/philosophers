@@ -29,9 +29,9 @@
 
 // Index of the parsed argument
 # define NB_PHILOS	0
-# define EAT_TIME	1
-# define SLEEP_TIME	2
-# define DIE_TIME	3
+# define DIE_TIME	1
+# define EAT_TIME	2
+# define SLEEP_TIME	3
 # define MAX_MEALS	4
 
 // Mutex helper
@@ -54,17 +54,21 @@ typedef struct s_philo
 typedef struct s_data
 {
 	t_philo			*philos;				// Table of philosophers
+	pthread_t		monitor;				// Monitor thread
 	pthread_mutex_t	*forks;					// Table of forks (mutex)
 	pthread_mutex_t	print;					// Mutex for printing on stdout
 	int				args[5];				// 0:Number of philosophers 1:Time to eat 2:Time to eat 3:Time to tie 4:Number of max eats
+	t_time			start_time;
 }	t_data;
 
 // PHILO
 int			parse(t_data *data, int ac, char **av);
 int			init(t_data *data);
 void		*run(void *arg);
+void		print_message(int message, t_philo *philo);
 
 // UTILS
+int			elapsed_time_since(t_time time);
 int			ft_atoi(char *str);
 void		ft_bzero(void *s, size_t n);
 int			ft_isspace(char c);
