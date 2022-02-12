@@ -38,12 +38,12 @@ int	parse(t_data *data, int ac, char **av)
 		if (!ft_isnumber(av[i]))
 			return (0);
 	ft_bzero(data, sizeof(t_data));
-	data->vars[4] = -1;
+	data->args[4] = -1;
 	i = -1;
 	while (++i < ac)
 	{
-		data->vars[i] = ft_atoi(av[i + 1]);
-		if (data->vars[i] < 0)
+		data->args[i] = ft_atoi(av[i + 1]);
+		if (data->args[i] < 0)
 			return (0);
 	}
 	return (1);

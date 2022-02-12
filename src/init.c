@@ -15,22 +15,33 @@
 int	init(t_data *data)
 {
 	int	i;
-	data->philos = ft_calloc(data->vars[0], sizeof(t_philo));
+	data->philos = ft_calloc(data->args[0], sizeof(t_philo));
 	if (!data->philos)
 		return (0);
-	data->forks = ft_calloc(data->vars[0], sizeof(pthread_mutex_t));
+	data->forks = ft_calloc(data->args[0], sizeof(pthread_mutex_t));
 	if (!data->forks)
 		return (0);
+	pthread_mutex_init(&data->print, NULL);
 	i = -1;
-	while (++i < data->vars[NB_PHILOS])
+	while (++i < data->args[NB_PHILOS])
 	{
-		data->philos[i].id = i + 1;
+		pthread_mutex_init(&data->forks[i], NULL);
+		data->philos[i].id = i;
+		data->philos[i].data = data;
+		data->philos[i].left_fork = &data->forks[i];
+		if (i == 0)
+			data->philos[i].right_fork = &data->forks[data->args[NB_PHILOS] - 1];
+		else
+			data->philos[i].right_fork = &data->forks[i - 1];
 		if (pthread_create(&data->philos[i].thread, NULL, &run, &data->philos[i]))
 			return (0);
 	}
 	i = -1;
-	while (++i < data->vars[NB_PHILOS])
+	while (++i < data->args[NB_PHILOS])
 		if (pthread_join(data->philos[i].thread, NULL))
 			return (0);
+	i = -1;
+	while (++i < data->args[NB_PHILOS])
+		pthread_mutex_destroy(&data->forks[i]);
 	return (1);
 }
