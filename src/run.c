@@ -16,8 +16,10 @@ void	print_message(int message, t_philo *philo)
 {
 	t_time	time;
 
+	gettimeofday(&time, NULL);
+	if (philo->data->stop)
+		return ;
 	pthread_mutex_lock(&philo->data->print);
-	gettimeofday(&time, DST_NONE);
 	if (message == EAT)
 		printf("%d %d is eating\n", elapsed_time_since(philo->data->start_time), philo->id + 1);
 	if (message == SLEEP)
@@ -49,9 +51,10 @@ void	forks(int action, t_philo *philo)
 
 void	eat(t_philo *philo)
 {
+	print_message(THINK, philo);
 	forks(LOCK, philo);
 	print_message(EAT, philo);
-	gettimeofday(&philo->last_eat, DST_NONE);
+	gettimeofday(&philo->last_eat, NULL);
 	usleep(philo->data->args[EAT_TIME] * 1000);
 	forks(UNLOCK, philo);
 }
@@ -60,18 +63,21 @@ void	sleep_and_think(t_philo *philo)
 {
 	print_message(SLEEP, philo);
 	usleep(philo->data->args[SLEEP_TIME] * 1000);
-	print_message(THINK, philo);
 }
 
 void	*run(void *arg)
 {
 	t_philo	*philo;
+	int		i;
 
 	philo = arg;
 	if (philo->id % 2 == 0)
 		usleep(400);
-	while (1)
+	i = -1;
+	while (++i != philo->data->args[MAX_MEALS])
 	{
+		if (philo->data->stop == 1)
+			return (0);
 		eat(philo);
 		sleep_and_think(philo);
 	}

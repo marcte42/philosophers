@@ -38,10 +38,11 @@ int	parse(t_data *data, int ac, char **av)
 		if (!ft_isnumber(av[i]))
 			return (0);
 	ft_bzero(data, sizeof(t_data));
-	data->args[4] = -1;
+	data->args[MAX_MEALS] = -1;
 	i = -1;
-	while (++i < ac)
+	while (++i < ac - 1)
 	{
+		
 		data->args[i] = ft_atoi(av[i + 1]);
 		if (data->args[i] < 0)
 			return (0);

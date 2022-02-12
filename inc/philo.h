@@ -59,12 +59,14 @@ typedef struct s_data
 	pthread_mutex_t	print;					// Mutex for printing on stdout
 	int				args[5];				// 0:Number of philosophers 1:Time to eat 2:Time to eat 3:Time to tie 4:Number of max eats
 	t_time			start_time;
+	int				stop;
 }	t_data;
 
 // PHILO
 int			parse(t_data *data, int ac, char **av);
 int			init(t_data *data);
 void		*run(void *arg);
+void		*monitoring(void *arg);
 void		print_message(int message, t_philo *philo);
 
 // UTILS

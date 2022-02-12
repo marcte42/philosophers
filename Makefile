@@ -21,6 +21,7 @@ SRCS =		philo.c	\
 			parse.c	\
 			init.c	\
 			run.c	\
+			monitor.c	\
 			utils.c	\
 
 OBJS = $(addprefix src/, $(SRCS:.c=.o))
