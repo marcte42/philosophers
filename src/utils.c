@@ -12,9 +12,22 @@
 
 #include "philo.h"
 
+unsigned long	get_ms(void)
+{
+	t_time	curr;
+
+	gettimeofday(&curr, NULL);
+	return (curr.tv_sec * 1000 + curr.tv_usec / 1000);
+}
+
+unsigned long	time_ms(unsigned long start)
+{
+	return (get_ms() - start);
+}
+
 int	elapsed_time_since(t_time time)
 {
-	t_time curr_time;
+	t_time	curr_time;
 
 	gettimeofday(&curr_time, NULL);
 	curr_time.tv_sec = curr_time.tv_sec - time.tv_sec;
@@ -39,7 +52,7 @@ void	ft_bzero(void *s, size_t n)
 
 void	*ft_calloc(size_t count, size_t size)
 {
-	void *tmp;
+	void	*tmp;
 
 	tmp = malloc(count * size);
 	if (!tmp)

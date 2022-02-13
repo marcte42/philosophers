@@ -42,7 +42,6 @@ int	parse(t_data *data, int ac, char **av)
 	i = -1;
 	while (++i < ac - 1)
 	{
-		
 		data->args[i] = ft_atoi(av[i + 1]);
 		if (data->args[i] < 0)
 			return (0);

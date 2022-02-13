@@ -38,44 +38,46 @@
 # define LOCK		1
 # define UNLOCK		0
 
-typedef struct timeval t_time;
+typedef struct timeval	t_time;
 
 typedef struct s_philo
 {
 	int				id;
 	pthread_t		thread;
-	int				state;					// State : EAT SLEEP THINK DEAD
-	pthread_mutex_t *left_fork;
-	pthread_mutex_t *right_fork;
-	t_time			last_eat;
+	int				state;
+	pthread_mutex_t	*left_fork;
+	pthread_mutex_t	*right_fork;
+	unsigned long	last_eat;
 	struct s_data	*data;
 }	t_philo;
 
 typedef struct s_data
 {
-	t_philo			*philos;				// Table of philosophers
-	pthread_t		monitor;				// Monitor thread
-	pthread_mutex_t	*forks;					// Table of forks (mutex)
-	pthread_mutex_t	print;					// Mutex for printing on stdout
-	int				args[5];				// 0:Number of philosophers 1:Time to eat 2:Time to eat 3:Time to tie 4:Number of max eats
-	t_time			start_time;
+	t_philo			*philos;
+	pthread_t		monitor;
+	pthread_mutex_t	*forks;
+	pthread_mutex_t	print;
+	int				args[5];
+	unsigned long	start_time;
 	int				stop;
 }	t_data;
 
 // PHILO
-int			parse(t_data *data, int ac, char **av);
-int			init(t_data *data);
-void		*run(void *arg);
-void		*monitoring(void *arg);
-void		print_message(int message, t_philo *philo);
+int				parse(t_data *data, int ac, char **av);
+int				init(t_data *data);
+void			*run(void *arg);
+void			monitoring(t_data *data);
+void			print_message(int message, t_philo *philo);
 
 // UTILS
-int			elapsed_time_since(t_time time);
-int			ft_atoi(char *str);
-void		ft_bzero(void *s, size_t n);
-int			ft_isspace(char c);
-int			ft_isdigit(int c);
-int			ft_error(char *error, int retval);
-void		*ft_calloc(size_t count, size_t size);
+unsigned long	get_ms(void);
+unsigned long	time_ms(unsigned long start);
+int				elapsed_time_since(t_time time);
+int				ft_atoi(char *str);
+void			ft_bzero(void *s, size_t n);
+int				ft_isspace(char c);
+int				ft_isdigit(int c);
+int				ft_error(char *error, int retval);
+void			*ft_calloc(size_t count, size_t size);
 
 #endif

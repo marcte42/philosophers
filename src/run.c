@@ -21,15 +21,15 @@ void	print_message(int message, t_philo *philo)
 		return ;
 	pthread_mutex_lock(&philo->data->print);
 	if (message == EAT)
-		printf("\e[1;32m%d %d is eating\e[0m\n", elapsed_time_since(philo->data->start_time), philo->id + 1);
+		printf("\e[1;32m%ld %d is eating\e[0m\n", time_ms(philo->data->start_time), philo->id + 1);
 	if (message == SLEEP)
-		printf("\e[1;33m%d %d is sleeping\e[0m\n", elapsed_time_since(philo->data->start_time), philo->id + 1);
+		printf("\e[1;33m%ld %d is sleeping\e[0m\n", time_ms(philo->data->start_time), philo->id + 1);
 	if (message == THINK)
-		printf("\e[1;35m%d %d is thinking\e[0m\n", elapsed_time_since(philo->data->start_time), philo->id + 1);
+		printf("\e[1;35m%ld %d is thinking\e[0m\n", time_ms(philo->data->start_time), philo->id + 1);
 	if (message == DEAD)
-		printf("\e[0;31m%d %d died\e[0m\n", elapsed_time_since(philo->data->start_time), philo->id + 1);
+		printf("\e[0;31m%ld %d died\e[0m\n", time_ms(philo->data->start_time), philo->id + 1);
 	if (message == FORK)
-		printf("\e[1;34m%d %d has taken a fork\e[0m\n", elapsed_time_since(philo->data->start_time), philo->id + 1);
+		printf("\e[1;34m%ld %d has taken a fork\e[0m\n", time_ms(philo->data->start_time), philo->id + 1);
 	pthread_mutex_unlock(&philo->data->print);
 }
 
@@ -37,10 +37,10 @@ void	forks(int action, t_philo *philo)
 {
 	if (action == LOCK)
 	{
-		print_message(FORK, philo);
 		pthread_mutex_lock(philo->left_fork);
 		print_message(FORK, philo);
 		pthread_mutex_lock(philo->right_fork);
+		print_message(FORK, philo);
 	}
 	else
 	{
@@ -53,7 +53,7 @@ void	philo_eat(t_philo *philo)
 {
 	forks(LOCK, philo);
 	print_message(EAT, philo);
-	gettimeofday(&philo->last_eat, NULL);
+	philo->last_eat = get_ms();
 	usleep(philo->data->args[EAT_TIME] * 1000);
 	forks(UNLOCK, philo);
 }
