@@ -21,15 +21,15 @@ void	print_message(int message, t_philo *philo)
 		return ;
 	pthread_mutex_lock(&philo->data->print);
 	if (message == EAT)
-		printf("%d %d is eating\n", elapsed_time_since(philo->data->start_time), philo->id + 1);
+		printf("\e[1;32m%d %d is eating\e[0m\n", elapsed_time_since(philo->data->start_time), philo->id + 1);
 	if (message == SLEEP)
-		printf("%d %d is sleeping\n", elapsed_time_since(philo->data->start_time), philo->id + 1);
+		printf("\e[1;33m%d %d is sleeping\e[0m\n", elapsed_time_since(philo->data->start_time), philo->id + 1);
 	if (message == THINK)
-		printf("%d %d is thinking\n", elapsed_time_since(philo->data->start_time), philo->id + 1);
+		printf("\e[1;35m%d %d is thinking\e[0m\n", elapsed_time_since(philo->data->start_time), philo->id + 1);
 	if (message == DEAD)
-		printf("%d %d died\n", elapsed_time_since(philo->data->start_time), philo->id + 1);
+		printf("\e[0;31m%d %d died\e[0m\n", elapsed_time_since(philo->data->start_time), philo->id + 1);
 	if (message == FORK)
-		printf("%d %d has taken a fork\n", elapsed_time_since(philo->data->start_time), philo->id + 1);
+		printf("\e[1;34m%d %d has taken a fork\e[0m\n", elapsed_time_since(philo->data->start_time), philo->id + 1);
 	pthread_mutex_unlock(&philo->data->print);
 }
 
@@ -37,10 +37,10 @@ void	forks(int action, t_philo *philo)
 {
 	if (action == LOCK)
 	{
+		print_message(FORK, philo);
 		pthread_mutex_lock(philo->left_fork);
 		print_message(FORK, philo);
 		pthread_mutex_lock(philo->right_fork);
-		print_message(FORK, philo);
 	}
 	else
 	{
@@ -49,9 +49,8 @@ void	forks(int action, t_philo *philo)
 	}
 }
 
-void	eat(t_philo *philo)
+void	philo_eat(t_philo *philo)
 {
-	print_message(THINK, philo);
 	forks(LOCK, philo);
 	print_message(EAT, philo);
 	gettimeofday(&philo->last_eat, NULL);
@@ -59,10 +58,11 @@ void	eat(t_philo *philo)
 	forks(UNLOCK, philo);
 }
 
-void	sleep_and_think(t_philo *philo)
+void	philo_sleep(t_philo *philo)
 {
 	print_message(SLEEP, philo);
 	usleep(philo->data->args[SLEEP_TIME] * 1000);
+	print_message(THINK, philo);
 }
 
 void	*run(void *arg)
@@ -78,8 +78,8 @@ void	*run(void *arg)
 	{
 		if (philo->data->stop == 1)
 			return (0);
-		eat(philo);
-		sleep_and_think(philo);
+		philo_eat(philo);
+		philo_sleep(philo);
 	}
 	return (0);
 }
