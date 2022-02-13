@@ -23,7 +23,10 @@ void	print_message(int message, t_philo *philo)
 	if (message == EAT)
 		printf("\e[1;32m%ld %d is eating\e[0m\n", time_ms(philo->data->start_time), philo->id + 1);
 	if (message == SLEEP)
+	{
 		printf("\e[1;33m%ld %d is sleeping\e[0m\n", time_ms(philo->data->start_time), philo->id + 1);
+		philo->data->meals_count++;
+	}
 	if (message == THINK)
 		printf("\e[1;35m%ld %d is thinking\e[0m\n", time_ms(philo->data->start_time), philo->id + 1);
 	if (message == DEAD)
@@ -51,6 +54,7 @@ void	forks(int action, t_philo *philo)
 
 void	philo_eat(t_philo *philo)
 {
+	print_message(THINK, philo);
 	forks(LOCK, philo);
 	print_message(EAT, philo);
 	philo->last_eat = get_ms();
@@ -62,7 +66,6 @@ void	philo_sleep(t_philo *philo)
 {
 	print_message(SLEEP, philo);
 	usleep(philo->data->args[SLEEP_TIME] * 1000);
-	print_message(THINK, philo);
 }
 
 void	*run(void *arg)

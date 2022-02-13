@@ -60,6 +60,7 @@ typedef struct s_data
 	int				args[5];
 	unsigned long	start_time;
 	int				stop;
+	int				meals_count;
 }	t_data;
 
 // PHILO

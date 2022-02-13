@@ -21,7 +21,9 @@ void	monitoring(t_data *data)
 		i = -1;
 		while (++i < data->args[NB_PHILOS])
 		{
-			if (time_ms(data->philos[i].last_eat)
+			if (data->meals_count == data->args[NB_PHILOS] * data->args[MAX_MEALS])
+				return ;
+			else if (time_ms(data->philos[i].last_eat)
 				> (unsigned long)data->args[DIE_TIME])
 			{
 				print_message(DEAD, &data->philos[i]);
