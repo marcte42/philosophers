@@ -75,7 +75,7 @@ void	*run(void *arg)
 
 	philo = arg;
 	if (philo->id % 2 == 0)
-		usleep(400);
+		usleep(200);
 	i = -1;
 	while (++i != philo->data->args[MAX_MEALS])
 	{

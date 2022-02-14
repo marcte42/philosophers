@@ -30,7 +30,7 @@ void	monitoring(t_data *data)
 				print_message(DEAD, &data->philos[i]);
 				return ;
 			}
-			usleep(50);
+			usleep(400);
 		}
 	}
 }

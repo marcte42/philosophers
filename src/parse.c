@@ -46,5 +46,7 @@ int	parse(t_data *data, int ac, char **av)
 		if (data->args[i] < 0)
 			return (0);
 	}
+	if (data->args[NB_PHILOS] == 0)
+		return (0);
 	return (1);
 }
