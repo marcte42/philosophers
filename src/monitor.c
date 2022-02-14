@@ -26,8 +26,8 @@ void	monitoring(t_data *data)
 			else if (time_ms(data->philos[i].last_eat)
 				> (unsigned long)data->args[DIE_TIME])
 			{
-				print_message(DEAD, &data->philos[i]);
 				data->stop = 1;
+				print_message(DEAD, &data->philos[i]);
 				return ;
 			}
 			usleep(50);

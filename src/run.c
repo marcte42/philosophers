@@ -17,9 +17,11 @@ void	print_message(int message, t_philo *philo)
 	t_time	time;
 
 	gettimeofday(&time, NULL);
+	pthread_mutex_lock(&philo->data->print);
+	if (message == DEAD)
+		printf("\e[0;31m%ld %d died\e[0m\n", time_ms(philo->data->start_time), philo->id + 1);
 	if (philo->data->stop)
 		return ;
-	pthread_mutex_lock(&philo->data->print);
 	if (message == EAT)
 		printf("\e[1;32m%ld %d is eating\e[0m\n", time_ms(philo->data->start_time), philo->id + 1);
 	if (message == SLEEP)
@@ -29,8 +31,6 @@ void	print_message(int message, t_philo *philo)
 	}
 	if (message == THINK)
 		printf("\e[1;35m%ld %d is thinking\e[0m\n", time_ms(philo->data->start_time), philo->id + 1);
-	if (message == DEAD)
-		printf("\e[0;31m%ld %d died\e[0m\n", time_ms(philo->data->start_time), philo->id + 1);
 	if (message == FORK)
 		printf("\e[1;34m%ld %d has taken a fork\e[0m\n", time_ms(philo->data->start_time), philo->id + 1);
 	pthread_mutex_unlock(&philo->data->print);
