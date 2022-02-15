@@ -12,25 +12,28 @@
 
 #include "philo.h"
 
-void	monitoring(t_data *data)
+void	*monitoring(void *arg)
 {
 	int		i;
+	t_data	*data;
 
+	data = arg;
 	while (data->args[MAX_MEALS] != 0)
 	{
 		i = -1;
 		while (++i < data->args[NB_PHILOS])
 		{
 			if (data->meals_count == data->args[NB_PHILOS] * data->args[MAX_MEALS])
-				return ;
+				return (NULL);
 			else if (time_ms(data->philos[i].last_eat)
 				> (unsigned long)data->args[DIE_TIME])
 			{
 				data->stop = 1;
 				print_message(DEAD, &data->philos[i]);
-				return ;
+				return (NULL);
 			}
-			usleep(400);
+			usleep(40);
 		}
 	}
+	return (NULL);
 }

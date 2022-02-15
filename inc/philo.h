@@ -67,7 +67,7 @@ typedef struct s_data
 int				parse(t_data *data, int ac, char **av);
 int				init(t_data *data);
 void			*run(void *arg);
-void			monitoring(t_data *data);
+void			*monitoring(void *arg);
 void			print_message(int message, t_philo *philo);
 
 // UTILS

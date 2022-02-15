@@ -21,7 +21,10 @@ void	print_message(int message, t_philo *philo)
 	if (message == DEAD)
 		printf("\e[0;31m%ld %d died\e[0m\n", time_ms(philo->data->start_time), philo->id + 1);
 	if (philo->data->stop)
+	{
+		pthread_mutex_unlock(&philo->data->print);
 		return ;
+	}
 	if (message == EAT)
 		printf("\e[1;32m%ld %d is eating\e[0m\n", time_ms(philo->data->start_time), philo->id + 1);
 	if (message == SLEEP)
