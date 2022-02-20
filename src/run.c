@@ -57,7 +57,6 @@ void	forks(int action, t_philo *philo)
 
 void	philo_eat(t_philo *philo)
 {
-	print_message(THINK, philo);
 	forks(LOCK, philo);
 	print_message(EAT, philo);
 	philo->last_eat = get_ms();
@@ -69,6 +68,7 @@ void	philo_sleep(t_philo *philo)
 {
 	print_message(SLEEP, philo);
 	usleep(philo->data->args[SLEEP_TIME] * 1000);
+	print_message(THINK, philo);
 }
 
 void	*run(void *arg)
@@ -78,7 +78,7 @@ void	*run(void *arg)
 
 	philo = arg;
 	if (philo->id % 2 == 0)
-		usleep(200);
+		usleep(philo->data->args[1]);
 	i = -1;
 	while (++i != philo->data->args[MAX_MEALS])
 	{
