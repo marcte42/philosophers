@@ -18,15 +18,16 @@ void	print_message(int message, t_philo *philo)
 
 	gettimeofday(&time, NULL);
 	pthread_mutex_lock(&philo->data->print);
-	if (message == DEAD)
-		printf("\e[0;31m%ld %d died\e[0m\n", time_ms(philo->data->start_time), philo->id + 1);
 	if (philo->data->stop)
 	{
 		pthread_mutex_unlock(&philo->data->print);
 		return ;
 	}
 	if (message == EAT)
+	{
 		printf("\e[1;32m%ld %d is eating\e[0m\n", time_ms(philo->data->start_time), philo->id + 1);
+		philo->last_eat = get_ms();
+	}
 	if (message == SLEEP)
 	{
 		printf("\e[1;33m%ld %d is sleeping\e[0m\n", time_ms(philo->data->start_time), philo->id + 1);
@@ -59,7 +60,6 @@ void	philo_eat(t_philo *philo)
 {
 	forks(LOCK, philo);
 	print_message(EAT, philo);
-	philo->last_eat = get_ms();
 	usleep(philo->data->args[EAT_TIME] * 1000);
 	forks(UNLOCK, philo);
 }
@@ -82,8 +82,13 @@ void	*run(void *arg)
 	i = -1;
 	while (++i != philo->data->args[MAX_MEALS])
 	{
+		pthread_mutex_lock(&philo->data->print);
 		if (philo->data->stop == 1)
+		{
+			pthread_mutex_unlock(&philo->data->print);
 			return (0);
+		}
+		pthread_mutex_unlock(&philo->data->print);
 		philo_eat(philo);
 		philo_sleep(philo);
 	}

@@ -28,8 +28,6 @@ int	init_philo(t_data *data)
 			data->philos[i].right_fork = &data->forks[data->args[NB_PHILOS] - 1];
 		else
 			data->philos[i].right_fork = &data->forks[i - 1];
-		if (pthread_create(&data->philos[i].thread, NULL, &run, &data->philos[i]))
-			return (0);
 	}
 	return (1);
 }
@@ -48,6 +46,10 @@ int	init(t_data *data)
 	data->start_time = get_ms();
 	if (!init_philo(data))
 		return (0);
+	i = -1;
+	while (++i < data->args[NB_PHILOS])
+		if (pthread_create(&data->philos[i].thread, NULL, &run, &data->philos[i]))
+			return (0);
 	pthread_create(&data->monitor, NULL, &monitoring, data);
 	i = -1;
 	while (++i < data->args[NB_PHILOS])
