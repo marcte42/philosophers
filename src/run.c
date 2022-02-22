@@ -58,6 +58,13 @@ void	forks(int action, t_philo *philo)
 
 void	philo_eat(t_philo *philo)
 {
+	if (philo->data->args[NB_PHILOS] == 1)
+	{
+		pthread_mutex_lock(philo->left_fork);
+		print_message(FORK, philo);
+		while (!philo->data->stop) ;
+		return ;
+	}
 	forks(LOCK, philo);
 	print_message(EAT, philo);
 	usleep(philo->data->args[EAT_TIME] * 1000);
