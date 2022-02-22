@@ -12,50 +12,39 @@
 
 #include "philo.h"
 
-unsigned long	get_ms(void)
+void	*ft_memset(void *dest, int c, size_t len)
 {
-	t_time	curr;
+	unsigned char	*ptr;
 
-	gettimeofday(&curr, NULL);
-	return (curr.tv_sec * 1000 + curr.tv_usec / 1000);
+	ptr = dest;
+	while (len--)
+		*ptr++ = c;
+	return (dest);
 }
 
-unsigned long	time_ms(unsigned long start)
+void	ft_bzero(void *s, size_t n)
 {
-	return (get_ms() - start);
+	ft_memset(s, 0, n);
 }
 
-int	ft_atoi(char *str)
+void	*ft_calloc(size_t count, size_t size)
 {
-	int	res;
-	int	sign;
-	int	i;
+	void	*tmp;
 
-	if (!str)
-		return (0);
-	i = 0;
-	while (ft_isspace(str[i]))
-	{
-		i++;
-	}
-	sign = 1;
-	while (str[i] == '+' || str[i] == '-')
-	{
-		if (str[i] == '-')
-			sign = -sign;
-		i++;
-	}
-	res = 0;
-	while (ft_isdigit(str[i]))
-	{
-		res = res * 10 + (str[i] - '0');
-		i++;
-	}
-	return (res * sign);
+	tmp = malloc(count * size);
+	if (!tmp)
+		return (NULL);
+	ft_bzero(tmp, size * count);
+	return (tmp);
 }
 
-int	ft_error(char *error, int retval)
+int	ft_isspace(char c)
 {
-	printf("%s", error);
-	return (retval);
+	return (c == '\t' || c == '\n' || c == '\v' || c == '\f'
+		|| c == '\r' || c == ' ');
+}
+
+int	ft_isdigit(int c)
+{
+	return (c >= '0' && c <= '9');
 }

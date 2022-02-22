@@ -22,7 +22,9 @@ SRCS =		philo.c	\
 			init.c	\
 			run.c	\
 			monitor.c	\
+			print.c	\
 			utils.c	\
+			libft.c	\
 
 OBJS = $(addprefix src/, $(SRCS:.c=.o))
 
